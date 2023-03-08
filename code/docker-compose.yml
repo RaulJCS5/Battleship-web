@@ -1,0 +1,29 @@
+version: "3.3"
+services:
+  db:
+    container_name: db-battleship
+    build:
+      context: .
+      dockerfile: ./docker/db/Dockerfile
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=group05
+      - POSTGRES_DB=battleship
+    ports:
+      - 5432:5432
+  backend:
+    container_name: be-battleship
+    build:
+      context: .
+      dockerfile: ./docker/be/Dockerfile
+    image: be-battleship:latest
+    ports:
+      - 8080:8080
+  frontEnd:
+    container_name: fe-battleship
+    build:
+      context: .
+      dockerfile: ./docker/fe/Dockerfile
+    image: fe-battleship:latest
+    ports:
+      - 8000:8000

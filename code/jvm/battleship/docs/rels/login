@@ -1,0 +1,10 @@
+[OPEN PATH]
+
+Description: Login path to authenticate user and get token.
+
+Input model:
+
+{
+    "username" : "example",
+    "password" : "exampleP"
+}

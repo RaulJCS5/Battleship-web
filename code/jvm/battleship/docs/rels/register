@@ -1,0 +1,11 @@
+[OPEN PATH]
+
+Description: Register path to create new user.
+
+Input model:
+
+{
+    "username" : "example",
+    "email" : "example@hotmail.com",
+    "password" : "Example!123"
+}

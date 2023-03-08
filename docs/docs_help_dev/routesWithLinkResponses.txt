@@ -1,0 +1,321 @@
+
+###########		Auth routes		£££££££££££££££££££
+
+/auth
+Get
+{
+	actions: [
+		{
+			"name": "back",
+			"method": "Get",
+			link : "/home",
+		},
+		{
+			"name": "login",
+			"method": "POST",
+			link : "/auth",
+		},
+		{
+			"name": "register",
+			"method": "Get",
+			link : "/register",
+		},
+		{
+			"name": "recover",
+			"method": "Get",
+			link : "/recover",
+		},	
+	]
+}
+
+/register
+Get
+{
+	actions: [
+		{
+			"name": "back",
+			"method": "Get",
+			link : "/auth",
+		},
+		{
+			"name": "register",
+			"method": "POST",
+			link : "/register",
+		}
+	]
+}
+
+/recover
+Get
+{
+	actions: [
+		{
+			"name": "back",
+			"method": "Get",
+			link : "/auth",
+		},
+		{
+			"name": "recover",
+			"method": "POST",
+			link : "/recover",
+		}
+	]
+}
+
+// rotas comuns para publico e privado podem ficar repetidas ou usamos um $´ {user} || 'public' ´
+
+###########			Public Routes		#########################################
+
+/Home/public
+Get
+{
+	actions: [
+		{
+			"name": "login",
+			"method": "Get",
+			link : "/auth",
+		},
+		{
+			"name": "leaderboard",
+			"method": "Get",
+			link : "/public/ranking/{?filter}",
+		},
+		{
+			"name": "Autores",
+			"method": "Get",
+			link : "/public/about",
+		},	
+	]
+}
+
+
+########	Privados		############################################
+
+/Home/{user}
+Get
+{
+	actions: [
+		{
+			"name": "logout",
+			"method": "POST",
+			link : "/logout",
+		},
+		{
+			"name": "leaderboard",
+			"method": "Get",
+			link : "/{user}/ranking{?filter}",
+		},
+		{
+			"name": "Autores",
+			"method": "Get",
+			link : "/{user}/about",
+		},
+		{
+			"name": "create",
+			"method": "Get",
+			link : "/{user}/creategame",
+		},
+		,
+		{
+			"name": "play",
+			"method": "Get",
+			link : "/{user}/lobby",
+		},
+		,
+		{
+			"name": "games",
+			"method": "Get",
+			link : "/{user}/games",
+		},
+	]
+}
+
+
+££££££££££££££		comuns	£££££££££££££££££££££££
+
+// as proximas rotas apenas sao necessarias para definir o link de backs pois tem de levar o userID
+
+/{user|public}/ranking{?filter}
+Get
+{
+	actions: [
+		{
+			"name": "back",
+			"method": "Get",
+			link : "/home/{user|public}",
+		},
+		{
+			"name": "filter",
+			"method": "Get",
+			link : "/{user|public}/ranking{?filter}",
+		}
+	]
+}
+
+
+/{user|public}/about
+Get
+{
+	actions: [
+		{
+			"name": "back",
+			"method": "Get",
+			link : "/home/{user|public}",
+		},
+		{
+			"name": "mailform",
+			"method": "get",
+			link : "/{user|public}/mailform",
+		}
+	]
+}
+
+/{user|public}/mailform
+Get
+{
+	actions: [
+		{
+			"name": "back",
+			"method": "Get",
+			link : "/{user|public}/about",
+		},
+		{
+			"name": "sendmail",
+			"method": "post",
+			link : "/{user|public}/sendmail",
+		}
+	]
+}
+
+/{user|public}/mailform
+POST
+{
+	actions: [
+		{
+			"name": "backWithSuccess",
+			"method": "Get",
+			link : "/{user|public}/about",
+		},
+		{
+			"name": "backWithFailure",
+			"method": "get",
+			link : "/{user|public}/mailform",
+		}
+	]
+}
+
+
+££££££££££££££££££££££££££		create, lobby, game list		£££££££££££££££££££££££££££££££££££
+
+/{user}/creategame
+Get
+{
+	actions: [
+		{
+			"name": "back",
+			"method": "GET",
+			link : "/Home/{user}",
+		},
+		{
+			"name": "iniciar",
+			"method": "POST",
+			link : "/{user}/creategame",
+		},
+	]
+}
+
+/{user}/creategame
+POST
+{
+	actions: [
+		{
+			"name": "back",
+			"method": "GET",
+			link : "/Home/{user}",
+		},
+		{
+			"name": "iniciar",
+			"method": "GET",
+			link : "/{user}/lobby/{gameId}",
+		},
+	]
+}
+
+// game id pode ou nao estar definido
+/{user}/lobby/{gameId}
+Get
+{
+	actions: [
+		{
+			"name": "back",
+			"method": "GET",
+			link : "/Home/{user}",
+		},
+		{
+			"name": "wait",
+			"method": "Get",
+			link : "/{user}/lobby/{gameId}",
+		},
+		{
+			"name": "play",
+			"method": "Get",
+			link : "/{user}/games/{gameId}/play",
+		}
+	]
+}
+
+/{user}/games
+Get
+{
+	actions: [
+		{
+			"name": "back",
+			"method": "GET",
+			link : "/Home/{user}",
+		},
+		{
+			"name": "enter game",
+			"method": "Get",
+			link : "/{user}/games/{gameId}/play",
+		}
+	]
+}
+
+
+££££££££££££££££££££	play game	££££££££££££££££££
+
+/{user}/games/{gameId}/play",
+GET
+{
+	actions: [
+		{
+			"name": "back",
+			"method": "GET",
+			link : "/{user}/games",
+		},
+		{
+			"name": "pingState",
+			"method": "GET",
+			link : "/{user}/games/{gameId}/play",
+		},
+		{
+			"name": "Finish",
+			"method": "POST",
+			link : "/{user}/games/{gameId}/play",
+		}
+	]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
